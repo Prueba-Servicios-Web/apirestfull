@@ -40,9 +40,20 @@ app.put('/api/cakes/:id',(req,res)=>{
 app.delete('/api/cakes/:id',(req,res)=>{
         
         })
-mongoose.createConnection('mongodb://localhost:27017/cakesAppProject',(err,res)=>{
-    if(err) {console.log(`Ocurrio un error cuando intentaba conectarse a la base
-    de datos  ${err}.`);}
+
+        var options = {
+            useMongoClient: true,
+            autoIndex: false, // Don't build indexes
+            reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+            reconnectInterval: 500, // Reconnect every 500ms
+            poolSize: 10, // Maintain up to 10 socket connections
+            // If not connected, return errors immediately rather than waiting for reconnect
+            bufferMaxEntries: 0
+          };
+         
+mongoose.connect('mongodb://proyectoapi:Abc123@ds127936.mlab.com:27936/heroku_hq6msf95',options,function(error){
+    if(error) {console.log(`Ocurrio un error cuando intentaba conectarse a la base
+    de datos  ${error}.`);}
     console.log('Se conecto a la base de datos')
     app.listen(port,()=>{
         console.log('Servidor node.js iniciado');
