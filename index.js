@@ -16,6 +16,6 @@ app.get('/api/cakes',(req,res)=>{
 })
 
 
-app.listen(port,()=>{
+app.listen((process.env.PORT || 3001),()=>{
     console.log('Servidor node.js iniciado');
 })
