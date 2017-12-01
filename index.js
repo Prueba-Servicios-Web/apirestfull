@@ -34,12 +34,15 @@ app.post('/api/cakes',(req,res)=>{
 })
 
 app.put('/api/cakes/:id',(req,res)=>{
-    
+    let cakeid=req.params.id 
+    Cakes.findById(cakeid,(err,cake)=>{
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   if(!cake) return res.status(404).send({message:`El producto id ${cakeid} no existe`})
+res.status(200).send({cake:cake}) 
+})
     })
 
-app.delete('/api/cakes/:id',(req,res)=>{
-        
-        })
+
 
         var options = {
             useMongoClient: true,
