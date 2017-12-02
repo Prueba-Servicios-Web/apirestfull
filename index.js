@@ -12,10 +12,22 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
 app.get('/api/cakes',(req,res)=>{
-    res.send(200,{cakes:[]})
+    Cakes.find((err,cakes)=>{
+        console.log(err);
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   if(!cakes) return res.status(404).send({message:`No existen items`})
+res.status(200).send({cakes:cakes}) 
+})
 })
 app.get('/api/cakes/:id',(req,res)=>{
-     
+    let cakeid=req.params.id 
+    console.log(cakeid)
+    Cakes.findById(cakeid,(err,cake)=>{
+        console.log(err);
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   if(!cake) return res.status(404).send({message:`El producto id ${cakeid} no existe`})
+res.status(200).send({cake:cake}) 
+})
 })
 
 app.post('/api/cakes',(req,res)=>{
@@ -34,12 +46,7 @@ app.post('/api/cakes',(req,res)=>{
 })
 
 app.put('/api/cakes/:id',(req,res)=>{
-    let cakeid=req.params.id 
-    Cakes.findById(cakeid,(err,cake)=>{
-        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
-   if(!cake) return res.status(404).send({message:`El producto id ${cakeid} no existe`})
-res.status(200).send({cake:cake}) 
-})
+    
     })
 
 
