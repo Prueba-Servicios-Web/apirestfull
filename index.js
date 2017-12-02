@@ -3,7 +3,9 @@
 const express=require('express');
 const bodyParser=require('body-parser');
 const mongoose=require('mongoose');
-const Cakes=require('./models/cakes')
+const Category=require('./models/categorys')
+
+const Product=require('./models/products')
 
 const app=express()
 const port=process.env.PORT || 3001
@@ -11,45 +13,59 @@ const port=process.env.PORT || 3001
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
-app.get('/api/cakes',(req,res)=>{
-    Cakes.find((err,cakes)=>{
-        console.log(err);
-        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
-   if(!cakes) return res.status(404).send({message:`No existen items`})
-res.status(200).send({cakes:cakes}) 
-})
-})
-app.get('/api/cakes/:id',(req,res)=>{
-    let cakeid=req.params.id 
-    console.log(cakeid)
-    Cakes.findById(cakeid,(err,cake)=>{
-        console.log(err);
-        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
-   if(!cake) return res.status(404).send({message:`El producto id ${cakeid} no existe`})
-res.status(200).send({cake:cake}) 
-})
-})
-
-app.post('/api/cakes',(req,res)=>{
+app.post('/api/category',(req,res)=>{
     console.log(req.body);
-    let cake=new Cakes()
-    cake.name=req.body.name
-    cake.picture=req.body.picture
-    cake.price=req.body.price
-    cake.category=req.body.category
-    cake.description=req.body.description
-    cake.save((err,cakeStore)=>{
-        if(err) res.status(500).send({message:`error al guardar el queque en la base de datos ${err}`})
-        res.status(200).send({cake:cakeStore})
+    let category=new Category()
+   category.name=req.body.name
+   category.save((err,categoryStore)=>{
+        if(err) res.status(500).send({message:`error al guardar la categoria ${err}`})
+        res.status(200).send({category:categoryStore})
     })
    
 })
 
-app.put('/api/cakes/:id',(req,res)=>{
-    
+app.get('/api/category',(req,res)=>{
+    Category.find((err,categoryList)=>{
+        console.log(err);
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   if(!categoryList) return res.status(404).send({message:`No existen categorias`})
+res.status(200).send({categoryList:categoryList}) 
+})
+})
+
+app.get('/api/products',(req,res)=>{
+    Product.find((err,products)=>{
+        console.log(err);
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   if(!products) return res.status(404).send({message:`No existen productos`})
+res.status(200).send({products:products}) 
+})
+})
+app.get('/api/products/:id',(req,res)=>{
+    let productid=req.params.id 
+    console.log(productid)
+    Product.findById(productid,(err,product)=>{
+        console.log(err);
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   if(!product) return res.status(404).send({message:`El producto id ${productid} no existe`})
+res.status(200).send({product:product}) 
+})
+})
+
+app.post('/api/products',(req,res)=>{
+    console.log(req.body);
+    let product=new Product()
+    product.name=req.body.name
+    product.picture=req.body.picture
+    product.price=req.body.price
+    product.description=req.body.description
+    product.category=req.body.category
+    product.save((err,productStore)=>{
+        if(err) res.status(500).send({message:`error al guardar el producto en la base de datos ${err}`})
+        res.status(200).send({product:productStore})
     })
-
-
+   
+})
 
         var options = {
             useMongoClient: true,
