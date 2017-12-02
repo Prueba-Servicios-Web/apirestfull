@@ -56,11 +56,11 @@ app.delete('/api/products/:id',(req,res)=>{
     console.log(productid)
     Product.findById(productid,(err,product)=>{
         console.log(err);
-        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+        if(err) res.status(500).send({message:`ocurrio un error ${err}`})
    product.remove(err=>{
-    if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+    if(err) res.status(500).send({message:`ocurrio un error ${err}`})
     res.status(200).send({message:`El producto ${product.name} se elimino correctamente`})   
-})
+    })
    })
 })
 
