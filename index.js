@@ -51,6 +51,18 @@ app.get('/api/products/:id',(req,res)=>{
 res.status(200).send({product:product}) 
 })
 })
+app.delete('/api/products/:id',(req,res)=>{
+    let productid=req.params.id 
+    console.log(productid)
+    Product.findById(productid,(err,product)=>{
+        console.log(err);
+        if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+   product.remove(err=>{
+    if(err) return res.status(500).send({message:`ocurrio un error ${err}`})
+    res.status(200).send({message:`El producto ${product.name} se elimino correctamente`})   
+})
+   })
+})
 
 app.post('/api/products',(req,res)=>{
     console.log(req.body);
