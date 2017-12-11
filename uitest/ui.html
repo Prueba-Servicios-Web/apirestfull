@@ -1,0 +1,162 @@
+<script src="content/jquery-1.10.2.min.js"></script>
+<script src="content/bootstrap.min.js"></script>
+<link href="content/Site.css" rel="stylesheet" />
+<link href="content/bootstrap.min.css" rel="stylesheet" />
+<link href="content/font-awesome.min.css" rel="stylesheet" />
+<br />
+<h4>Seleccione un producto</h4>
+<br />
+
+<select class="form-control" id="cboProducts" style="display:inline-block"></select> <span class="fa fa-info-circle" id="showProduct" style="cursor:pointer;display:inline-block"> Info.</span>
+<br />
+<h4>Agregue un producto</h4>
+<br />
+<label>Nombre:</label><input type="text" class="form-control" name="pname" id="pname" /><br />
+<label>Descripcion:</label><input type="text" class="form-control" name="pdescrip" id="pdescrip" /><br />
+<label>Sabor:</label>
+<select id="pflavor" class="form-control">
+    <option value="fresa">fresa</option>
+    <option value="chocolate">chocolate</option>
+    <option value="vainilla">vainilla</option>
+</select>
+
+<label>Color:</label>
+<select id="pcolor" class="form-control">
+    <option value="rojo">rojo</option>
+    <option value="cafe">cafe</option>
+    <option value="amarillo">amarillo</option>
+</select>
+
+<span class="fa fa-2x fa-plus" style="color:green;cursor:pointer" onclick="addProduct()"></span>
+
+<!-- Modal -->
+<div class="modal fade" id="productInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Informacion de producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Id:</p><p id="productId"></p>
+                <p>Nombre:</p><p id="productName"></p>
+                <p>Descripcion:</p><p id="productDescrip"></p>
+                <p>Sabor:</p><p id="productFlavor"></p>
+                <p>Color:</p><p id="productColor"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+
+
+            //$.support.cors = true;
+            loadProducts();
+
+            $('#showProduct').click(function () {
+                var productId = $('#cboProducts').val();
+                var url = "http://localhost:3001/api/products/" + productId;
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    // headers: { 'Access-Control-Allow-Origin': '*' },
+                    // crossDomain: true,
+                    // contentType: "application/json; charset=utf-8",
+                    //data: "{firstName:'Aidy', lastName:'F'}",
+                    dataType: "json",
+                    timeout: 4000,
+                    success: function (data) {
+                        loadProductInfo(data.product);
+
+                    },
+                    error: function (xhr, status, error) { alert(error); },
+                    cache: false
+                });
+
+            })
+
+
+        })
+
+        function loadProducts() {
+            var url = "http://localhost:3001/api/products";
+            $.ajax({
+                type: 'GET',
+                url: url,
+                //headers: { 'Access-Control-Allow-Origin': '*' },
+                //crossDomain: true,
+                // contentType: "application/json; charset=utf-8",
+                //data: "{firstName:'Aidy', lastName:'F'}",
+                dataType: "json",
+                timeout: 4000,
+                async: false,
+                success: function (data) {
+                    cboProductsPopulate(data.products);
+                },
+                error: function (xhr, status, error) { alert(error); },
+                cache: false
+            });
+
+        }
+
+        function cboProductsPopulate(productList) {
+            $('#cboProducts').empty();
+            productList.forEach(function (element) {
+                $('#cboProducts').append('<option value="' + element._id + '">' + element.name + '</option>');
+            });
+
+        }
+
+        function loadProductInfo(productInfo) {
+            console.log(productInfo);
+            $('#productId').empty();
+            $('#productName').empty();
+            $('#productDescrip').empty();
+            $('#productFlavor').empty();
+            $('#productColor').empty();
+            $('#productId').html(productInfo._id);
+            $('#productName').text(productInfo.name);
+            $('#productDescrip').text(productInfo.description);
+            $('#productFlavor').text(productInfo.details != null ? productInfo.details.flavor : 'N/A');
+            $('#productColor').text(productInfo.details != null ? productInfo.details.color : 'N/A');
+            $('#productInfo').modal('toggle');
+        }
+
+        function addProduct() {
+            var url = "http://localhost:3001/api/products";
+            var obj = {};
+            obj.name = $('#pname').val();
+            obj.description = $('#pdescrip').val();
+            var details = {};
+            details.color = $('#pcolor').val();
+            details.flavor = $('#pflavor').val();
+            obj.details = details;
+            $.ajax({
+                type: 'POST',
+                url: url,
+                //headers: { 'Access-Control-Allow-Origin': '*' },
+                //crossDomain: true,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(obj),
+                dataType: "json",
+                timeout: 4000,
+                async: false,
+                success: function (data) {
+                    loadProducts();
+                },
+                error: function (xhr, status, error) { alert(error); },
+                cache: false
+            });
+        }
+
+    </script>

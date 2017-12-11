@@ -23,14 +23,21 @@ res.status(200).send({products:products})
 }
 
 function addProduct(req,res){
+    console.log('cuerpo de la pticion')
+    console.log(req.body)
+    console.log(req.body.name)
+    var body=req.body;
     let product = new Product()
-    product.name=req.body.name
-    product.description=req.body.description
+    product.name=body.name
+    product.description=body.description
+    product.details.flavor=body.details.flavor
+    product.details.color=body.details.color
     product.save((err,productStored)=>{
         console.log(err);
 if(err) res.status(500).send({message:"Error al guardar el producto"})
-res.status(200).send({message:"Guardado con exito"})
+
 })
+res.status(200).send({message:"Guardado con exito"})
 }
 
 function deleteProduct(id){
