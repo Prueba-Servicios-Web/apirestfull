@@ -6,5 +6,6 @@ const api=require('./routes')
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 app.use('/api',api)
-
+var cors=require('cors');
+api.use(cors());
 module.exports=app;
