@@ -22,8 +22,15 @@ res.status(200).send({products:products})
 })
 }
 
-function updateProduct(id){
-    
+function addProduct(req,res){
+    let product = new Product()
+    product.name=req.body.name
+    product.description=req.body.description
+    product.save((err,productStored)=>{
+        console.log(err);
+if(err) res.status(500).send({message:"Error al guardar el producto"})
+res.status(200).send({message:"Guardado con exito"})
+})
 }
 
 function deleteProduct(id){
@@ -32,5 +39,6 @@ function deleteProduct(id){
 
 module.exports = {
 getProduct,
-getProducts
+getProducts,
+addProduct
 }
