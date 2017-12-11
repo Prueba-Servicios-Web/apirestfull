@@ -3,8 +3,8 @@
 const express = require('express')
 const ProductCtrl=require('../controllers/products')
 const api=express.Router()
-var cors=require('cors');
-api.use(cors());
+//var cors=require('cors');
+//api.use(cors());
 api.get('/products',ProductCtrl.getProducts)
 api.get('/products/:id',ProductCtrl.getProduct)
 api.all('/', function(req, res, next) {
