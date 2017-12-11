@@ -10,4 +10,7 @@ api.all('/', function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
    });
+   var cors=require('cors');
+   
+   app.use(cors({origin:true,credentials: true}));
 module.exports=api;
