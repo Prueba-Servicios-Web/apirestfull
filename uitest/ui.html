@@ -1,3 +1,4 @@
+<title>Index</title>
 <script src="content/jquery-1.10.2.min.js"></script>
 <script src="content/bootstrap.min.js"></script>
 <link href="content/Site.css" rel="stylesheet" />
@@ -65,7 +66,7 @@
 
             $('#showProduct').click(function () {
                 var productId = $('#cboProducts').val();
-                var url = "http://localhost:3001/api/products/" + productId;
+                var url = "https://proyectoapirest.herokuapp.com/api/products/" + productId;
                 $.ajax({
                     type: 'GET',
                     url: url,
@@ -89,7 +90,7 @@
         })
 
         function loadProducts() {
-            var url = "http://localhost:3001/api/products";
+            var url = "https://proyectoapirest.herokuapp.com/api/products";
             $.ajax({
                 type: 'GET',
                 url: url,
@@ -133,7 +134,7 @@
         }
 
         function addProduct() {
-            var url = "http://localhost:3001/api/products";
+            var url = "https://proyectoapirest.herokuapp.com/api/products";
             var obj = {};
             obj.name = $('#pname').val();
             obj.description = $('#pdescrip').val();
