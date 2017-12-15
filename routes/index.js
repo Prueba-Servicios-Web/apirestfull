@@ -11,5 +11,7 @@ api.use(bodyParser.json())
 api.get('/products',ProductCtrl.getProducts)
 api.get('/products/:id',ProductCtrl.getProduct)
 api.post('/products',ProductCtrl.addProduct)
+api.put('/products/:id',ProductCtrl.updateProduct)
+api.delete('/products/:id',ProductCtrl.deleteProduct)
 
 module.exports=api;

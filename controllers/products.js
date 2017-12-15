@@ -40,12 +40,42 @@ if(err) res.status(500).send({message:"Error al guardar el producto"})
 res.status(200).send({message:"Guardado con exito"})
 }
 
-function deleteProduct(id){
-    
+function deleteProduct(req,res){  
+    try{
+  let productid=req.params.id 
+  console.log(productid)
+  Product.findById(productid,(err,product)=>{
+      console.log(product);
+      if(err) res.status(500).send({message:`ocurrio un error ${err}`})
+      product.remove(err=>{
+    if(err) res.status(500).send({message:`ocurrio un error al intenar eliminar el producto ${err}`})
+    res.status(200).send({message:"El producto se elimino correctamente"})     
+})
+})
+    }
+    catch(e){
+        console.log(e);
+    }
 }
+
+function updateProduct(req,res){  
+  
+  let productid=req.params.id 
+  let update=req.body
+  console.log(productid)
+  Product.findByIdAndUpdate(productid,update,(err,productUpdated)=>{
+      console.log(productUpdated);
+      if(err) res.status(500).send({message:`ocurrio un error al intentar el update ${err}`})
+     res.status(200).send({message:"El producto se actualizo correctamente"})     
+})
+    }
+
+
 
 module.exports = {
 getProduct,
 getProducts,
-addProduct
+addProduct,
+deleteProduct,
+updateProduct
 }
